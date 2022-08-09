@@ -202,6 +202,13 @@ body {
   background-color: rgb(71, 192, 15);
   border: 3px solid rgb(23, 83, 5);
   height: 70px;
+  width: 70px;
+  text-decoration: none;
+  line-height: 60px;
+  text-align: center;
+  color: black;
+  font-size: 18px;
+  font-family:'Times New Roman', Times, serif;
 }
 
 .mybudget-submit-button:hover {
@@ -231,6 +238,13 @@ body {
   background-color: rgb(97, 94, 94);
   border: 3px solid rgb(0, 0, 0);
   height: 70px;
+  width: 65px;
+  text-decoration: none;
+  line-height: 70px;
+  text-align: center;
+  color: black;
+  font-size: 18px;
+  font-family:'Times New Roman', Times, serif
 }
 
 .category-delete:hover {
