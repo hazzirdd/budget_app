@@ -43,6 +43,8 @@ def my_budget():
         color = request.form['color']
         id = request.form['id']
 
+        print(f"category: {category} amount: {amount} color: {color} id: {id}")
+
         return render_template('my_budget.html', categories=categories)
     
 @app.route('/spending', methods=['POST', 'GET'])

@@ -239,4 +239,75 @@ body {
   height: 70px;
   color: red;
   cursor: pointer;
+  font-style: italic;
+}
+
+.mybudget-category-new {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 30px;
+  padding: 1px;
+  border: 2px dashed black;
+  border-radius: 4%;
+  height: 110px;
+  width: 830px;
+}
+
+.category-input-box-new {
+  font-size: 30px;
+  width: auto;
+  background-color: transparent;
+  border: 0px;
+  cursor: pointer;
+}
+
+.category-input-box-new::placeholder {
+  color: rgb(255, 255, 255);
+  font-style: italic;
+}
+
+.category-input-box-new:hover {
+  border: 1px dashed black;
+}
+
+.mybudget-amount-new {
+  background-color: transparent;
+  border: 0px;
+  color: black;
+  width: 150px;
+  height: 30px;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.mybudget-amount-new::placeholder {
+  color: rgb(255, 255, 255);
+  font-style: italic;
+}
+
+.mybudget-amount-new:hover {
+  border: 1px dashed black;
+}
+
+.mybudget-submit-new {
+  background-color: rgb(71, 192, 15);
+  border: 3px solid rgb(23, 83, 5);
+  height: 70px;
+  width: 87px;
+  font-size: 70px;
+  padding: 0px;
+  line-height: 70px;
+}
+
+.mybudget-submit-new:hover {
+  background-color: rgb(71, 192, 15);
+  border: 3px solid rgb(21, 255, 0);
+  color: rgb(21, 255, 0);
+  height: 70px;
+  width: 87px;
+  font-size: 70px;
+  padding: 0px;
+  line-height: 70px;
+  cursor: pointer;
 }

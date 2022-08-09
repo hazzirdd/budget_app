@@ -10,35 +10,24 @@
 <div class="all-categories-container">
     <div class="mybudget-container">
 
-
         {% for category in categories %}
-        <form class="mybudget-category" style="background-color: {{ category.color }};">
+        <form class="mybudget-category" style="background-color: {{ category.color }};" method="post">
             <input type="text" class="category-input-box" value="{{ category.title }}" placeholder="{{ category.title }}" name="category">
             $<input class="mybudget-amount" type="number" value="{{ category.limit }}" name="amount">
-            <input class="category-color" type="color" name="color">
+            <input class="category-color" type="color" value="{{ category.color }}" name="color">
             <input class="mybudget-submit-button" type="submit" id="mybudget-submit" value="Update">
-            <div style="display:none;" value="{{ category.category_id }}" name="id"></div>
+            <input style="display:none;" value="{{ category.category_id }}" name="id">
             <button class="category-delete">Delete</button>
         </form><br>
         {% endfor %}
 
+        <div class="mybudget-category-new" style="background-color: rgb(196, 190, 190);">
+            <input type="text" class="category-input-box-new" placeholder="New Category" name="new_category">
+            $<input class="mybudget-amount-new" type="number" placeholder="Budget">
+            <input class="category-color" type="color" value="" name="color">
+            <input class="mybudget-submit-new" type="submit" id="mybudget-submit" value="+">
 
-        <!-- <div class="mybudget-category" style="background-color: red;">
-            <input type="text" class="category-input-box" value="Groceries">
-            $<input class="mybudget-amount" type="number" value="200">
         </div><br>
-
-        <div class="mybudget-category" style="background-color: green;">
-            <input type="text" class="category-input-box" value="Gas">
-            $<input class="mybudget-amount" type="number" value="100">
-        </div><br>
-
-        <div class="mybudget-category" style="background-color: rgb(70, 62, 184);">
-            <input type="text" class="category-input-box" value="Fun">
-            $<input class="mybudget-amount" type="number" value="100">
-        </div><br> -->
-
-        <!-- <input class="mybudget-submit-button" type="submit" id="mybudget-submit" value="Update"> -->
 
     </div>
 </div>
