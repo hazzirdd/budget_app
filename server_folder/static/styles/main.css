@@ -119,3 +119,124 @@ body {
   font-family: fantasy;
   -webkit-text-stroke: 0.2px white;
 }
+
+
+/* ADD EXPENSE */
+.add-expense-container-container {
+  display: flex;
+  justify-content: center;
+}
+
+.add-expense-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  top: 20px;
+  padding: 20px;
+  width: 650px;
+  height: 400px;
+  border: 4px solid black;
+  background-color: rgba(197, 193, 193, 0.52);
+}
+
+.expense-form {
+  position: relative;
+  left: 5px;
+  top: 18px;
+}
+
+.expense-button {
+  background-color: rgb(155, 23, 23);
+  border: 2px solid rgb(61, 4, 4);
+  width: 110px;
+  height: 32px;
+}
+
+.expense-button:hover {
+  border: 2px solid red;
+  color: red;
+  cursor: pointer;
+}
+
+.field-input {
+  background-color: rgb(186, 208, 253);
+  border: 2px solid rgb(26, 26, 88);
+  border-radius: 8%;
+  width: 180px;
+  height: 26px;
+}
+
+
+/* MY BUDGET */
+.mybudget-container {
+  width: 840px;
+  height: auto;
+  background-color: #818181;
+  padding: 30px;
+}
+
+.mybudget-category {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 30px;
+  padding: 1px;
+  border: 2px solid black;
+  border-radius: 4%;
+  height: 110px;
+  width: 830px;
+}
+
+.mybudget-amount {
+  background-color: transparent;
+  border: 0px;
+  color: black;
+  width: 150px;
+  height: 30px;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.mybudget-submit-button {
+  background-color: rgb(71, 192, 15);
+  border: 3px solid rgb(23, 83, 5);
+  height: 70px;
+}
+
+.mybudget-submit-button:hover {
+  border: 3px solid rgb(21, 255, 0);
+  color: rgb(21, 255, 0);
+  cursor: pointer;
+}
+
+.category-input-box {
+  font-size: 30px;
+  width: auto;
+  background-color: transparent;
+  border: 0px;
+  cursor: pointer;
+}
+
+.category-color {
+  height: 70px;
+  cursor: pointer;
+}
+
+.category-color:hover {
+  border: 3px solid rgb(21, 255, 0);
+}
+
+.category-delete {
+  background-color: rgb(97, 94, 94);
+  border: 3px solid rgb(0, 0, 0);
+  height: 70px;
+}
+
+.category-delete:hover {
+  background-color: rgb(139, 136, 136);
+  border: 3px solid rgb(255, 0, 0);
+  height: 70px;
+  color: red;
+  cursor: pointer;
+}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-title-container">
+    <h1 class="page-title">SPENDING</h1>
+</div>
+
+<div class="all-categories-container">
+    <div clas="mybudget-container">
+
+        <p>ID / NAME / LOCATION / AMOUNT / DATE / CATEGORY_ID / USER_ID </p>
+        {% for expense in expenses %}
+        <p>{{ expense.expense_id }} / {{ expense.name }} / {{ expense.location }} / ${{ expense.amount }} / {{ expense.date }} / {{ expense.category_id }} / {{ expense.user_id }} </p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

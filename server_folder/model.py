@@ -2,6 +2,7 @@
 from server_folder import db
 
 ## SEED DATABASE
+# from email.policy import default
 # from flask_sqlalchemy import SQLAlchemy
 # from flask import Flask
 # app = Flask(__name__)
@@ -17,6 +18,7 @@ class User(db.Model):
     password = db.Column(db.String(64), nullable=False)
     first_name = db.Column(db.String(64), nullable=False)
     last_name = db.Column(db.String(64), nullable=False)
+    budget = db.Column(db.Float, nullable=False, default=0.00)
 
 class Category(db.Model):
 
@@ -25,6 +27,7 @@ class Category(db.Model):
     category_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     color = db.Column(db.String(64), nullable=False)
     title = db.Column(db.String(64), nullable=False)
+    limit = db.Column(db.Float, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
 
 class Expense(db.Model):

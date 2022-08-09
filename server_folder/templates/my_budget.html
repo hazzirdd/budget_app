@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-title-container">
+    <h1 class="page-title">MY BUDGET</h1>
+    <h1>Budget: <span style="color: green;">$2,200</span></h1>
+    <h2>Remainder: <span style="color:green;">$200</span></h2>
+</div>
+
+<div class="all-categories-container">
+    <div class="mybudget-container">
+
+
+        {% for category in categories %}
+        <form class="mybudget-category" style="background-color: {{ category.color }};">
+            <input type="text" class="category-input-box" value="{{ category.title }}" placeholder="{{ category.title }}" name="category">
+            $<input class="mybudget-amount" type="number" value="{{ category.limit }}" name="amount">
+            <input class="category-color" type="color" name="color">
+            <input class="mybudget-submit-button" type="submit" id="mybudget-submit" value="Update">
+            <div style="display:none;" value="{{ category.category_id }}" name="id"></div>
+            <button class="category-delete">Delete</button>
+        </form><br>
+        {% endfor %}
+
+
+        <!-- <div class="mybudget-category" style="background-color: red;">
+            <input type="text" class="category-input-box" value="Groceries">
+            $<input class="mybudget-amount" type="number" value="200">
+        </div><br>
+
+        <div class="mybudget-category" style="background-color: green;">
+            <input type="text" class="category-input-box" value="Gas">
+            $<input class="mybudget-amount" type="number" value="100">
+        </div><br>
+
+        <div class="mybudget-category" style="background-color: rgb(70, 62, 184);">
+            <input type="text" class="category-input-box" value="Fun">
+            $<input class="mybudget-amount" type="number" value="100">
+        </div><br> -->
+
+        <!-- <input class="mybudget-submit-button" type="submit" id="mybudget-submit" value="Update"> -->
+
+    </div>
+</div>
+
+{% endblock %}

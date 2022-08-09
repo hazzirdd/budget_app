@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-title-container">
+    <h1 class="page-title">ADD EXPENSE</h1>
+</div>
+
+
+<div class="add-expense-container-container">
+    <div class="add-expense-container">
+      <h1>New Expenditure</h1>
+      <form class="expense-form" method="post">
+          <input class="field-input" type="text" name="location" placeholder="Location"><br>
+          <input class="field-input" type="number" name="amount" placeholder="Amount"><br>
+
+          <select class="field-input" name="category">
+            {% for category in categories %}
+            <option value="{{ category.category_id }}">{{ category.title }}</option>
+            {% endfor %}
+          </select>
+            <br>
+
+          <input class="field-input" type="datetime-local" name="date" placeholder="Date"><br><br>
+          <input class="expense-button" type="submit" value="Add Expense">
+      </form>
+    </div>
+   </div>
+{% endblock %}
