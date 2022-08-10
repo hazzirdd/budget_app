@@ -8,15 +8,15 @@
     <title>Budgeter</title>
 </head>
 <body>
-
+    {% if "user" in session %}
     <div id="mySidebar" class="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a>IN BUDGET</a>
+        <a>INBUDGET</a>
         <a href="/">Home</a>
         <a href="/add_expense">Add Expense</a>
         <a href="/my_budget">My Budget</a>
         <a href="/spending">Spending</a>
-        <a href="">Logout</a>
+        <a href="/logout">Logout</a>
     </div>
 
 
@@ -38,7 +38,7 @@
           document.getElementById("main-title").style.marginLeft = "0";
         }
     </script>
-
+    {% endif %}
     {% block content %}
     {% endblock %}
 

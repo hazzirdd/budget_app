@@ -1,5 +1,5 @@
 from unicodedata import category
-from model import connect_to_db, db, Expense, User, Category, ExpenseCategory
+from model import connect_to_db, db, Expense, User, Category, ExpenseCategory, Bill
 
 from datetime import datetime
 
@@ -8,7 +8,7 @@ def create_user():
     print('Users')
     User.query.delete()
 
-    user1 = User(email='user@example.com', password='123', first_name='John', last_name='Smith', budget=0.00)
+    user1 = User(email='user@example.com', password='123', first_name='John', last_name='Smith', budget=0.00, bill_color='#955525')
 
     db.session.add(user1)
 
@@ -42,6 +42,20 @@ def create_expense_category():
 
     db.session.add(ec1)
 
+def create_bill():
+    print('Bill')
+    Bill.query.delete()
+
+    bill1 = Bill(name="Rent", amount=1350.00, payed=False, user_id=1)
+    bill2 = Bill(name="Sonata Insurance", amount=160.00, payed=False, user_id=1)
+    bill3 = Bill(name="Sonata Payment", amount=250.00, payed=False, user_id=1)
+    bill4 = Bill(name="IPhone", amount=68.00, payed=False, user_id=1)
+
+    db.session.add(bill1)
+    db.session.add(bill2)
+    db.session.add(bill3)
+    db.session.add(bill4)
+
 
 if __name__ == '__main__':
     from flask import Flask
@@ -54,5 +68,6 @@ if __name__ == '__main__':
     create_category()
     create_expense()
     create_expense_category()
+    create_bill()
 
     db.session.commit()

@@ -2,7 +2,6 @@
 from server_folder import db
 
 ## SEED DATABASE
-# from email.policy import default
 # from flask_sqlalchemy import SQLAlchemy
 # from flask import Flask
 # app = Flask(__name__)
@@ -19,6 +18,7 @@ class User(db.Model):
     first_name = db.Column(db.String(64), nullable=False)
     last_name = db.Column(db.String(64), nullable=False)
     budget = db.Column(db.Float, nullable=False, default=0.00)
+    bill_color = db.Column(db.String(64), nullable=False, default='#955525')
 
 class Category(db.Model):
 
@@ -49,6 +49,16 @@ class ExpenseCategory(db.Model):
     expense_category_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     expense_id = db.Column(db.Integer, db.ForeignKey('expenses.expense_id'))
     category_id = db.Column(db.Integer, db.ForeignKey('categories.category_id'))
+
+class Bill(db.Model):
+
+    __tablename__ = 'bills'
+
+    bill_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(255), nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    payed = db.Column(db.Boolean, nullable=False, default=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
 
 
 def connect_to_db(app):

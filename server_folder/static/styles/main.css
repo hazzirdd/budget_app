@@ -91,7 +91,6 @@ body {
 
 .all-categories-grid {
   display: grid;
-  grid-template-rows: 200px 200px;
   grid-template-columns: 240px 240px 240px;
   column-gap: 50px;
   row-gap: 50px;
@@ -105,21 +104,37 @@ body {
 
 .category-title {
   color: black;
-  -webkit-text-stroke: 0.5px white;
+  -webkit-text-stroke: 0.3px white;
   text-align: center;
   font-family: fantasy;
-  font-size: 40px;
-  opacity: .6;
+  font-size:240%;
 }
 
 .category-amount {
   text-align: center;
   color: green;
-  font-size: 35px;
+  font-weight: 600;
+  font-size: 40px;
   font-family: fantasy;
-  -webkit-text-stroke: 0.2px white;
+  -webkit-text-stroke: 0.1px white;
 }
 
+.bills-container {
+  display: flex;
+  flex-direction: column;
+  width: 650px;
+  height: auto;
+  border: 2px solid black;
+  border-radius: 10%;
+}
+
+.bills-list {
+  display: grid;
+  justify-content: center;
+  text-align: center;
+  grid-template-columns: 290px 290px;
+  font-size: 30px;
+}
 
 /* ADD EXPENSE */
 .add-expense-container-container {
@@ -169,6 +184,47 @@ body {
 
 
 /* MY BUDGET */
+.budget-input-box-container {
+  width: 300px;
+  background-color: transparent;
+  border: 0px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 40px;
+  color: green;
+  font-weight: 600;
+  border: 6px double black;
+  display: flex;
+}
+
+.budget-input-box {
+  width: 300px;
+  background-color: transparent;
+  border: 0px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 40px;
+  color: green;
+  font-weight: 600;
+  flex-direction: row;
+}
+
+.budget-input-box:focus {
+  outline: 0px solid transparent;
+}
+
+.budget-update-button {
+  width: 300px;
+  background-color: rgb(71, 192, 15);
+  border: 3px solid black;
+}
+
+.budget-update-button:hover {
+  border: 3px solid rgb(21, 255, 0);
+  color: rgb(21, 255, 0);
+  cursor: pointer;
+}
+
 .mybudget-container {
   width: 840px;
   height: auto;
@@ -262,7 +318,7 @@ body {
   align-items: center;
   font-size: 30px;
   padding: 1px;
-  border: 2px dashed black;
+  border: 2px dashed rgb(122, 122, 122);
   border-radius: 4%;
   height: 110px;
   width: 830px;
@@ -274,6 +330,7 @@ body {
   background-color: transparent;
   border: 0px;
   cursor: pointer;
+  border: 1px dashed #C4BEBE;
 }
 
 .category-input-box-new::placeholder {
@@ -293,6 +350,7 @@ body {
   height: 30px;
   font-size: 30px;
   cursor: pointer;
+  border: 1px dashed #C4BEBE;
 }
 
 .mybudget-amount-new::placeholder {

@@ -7,25 +7,29 @@
 </div>
 
 <div class="all-categories-container">
-    <div class="all-categories-grid">
-        <div class="category-container" style="background-color:red;">
-            <h1 class="category-title">Groceries</h1>
-            <p class="category-amount">100$ left</p>
-        </div>
-        
-        <div class="category-container" style="background-color:green;">
-            <h1 class="category-title">Gas</h1>
-            <p class="category-amount">90$ left</p>
-        </div>
+    <div class="all-categories-grid" style="grid-template-rows: 200px;">
 
-        <div class="category-container" style="background-color:rgb(0, 9, 128);">
-            <h1 class="category-title">Fun</h1>
-            <p class="category-amount">10$ left</p>
+        {% for category in categories %}
+        <div class="category-container" style="background-color:{{ category.color }};">
+            <h1 class="category-title">{{ category.title }}</h1>
+            {% for k, v in categories_dict.items() %}
+            {% if category.category_id == k %}
+            <p class="category-amount">${{ v }} left</p>
+            {% endif %}
+            {% endfor %}
         </div>
+        {% endfor %}
 
-        <div class="category-container" style="background-color:rgb(190, 62, 152);">
-            <h1 class="category-title">Gifts</h1>
-            <p class="category-amount">30$ left</p>
+    </div>  
+</div><br><br><br>
+
+<div class="all-categories-container">
+    <div class="bills-container" style="background-color:{{ bill_color }};">
+        <h1 class="category-title">Bills</h1>
+        <div class="bills-list">
+            {% for bill in bills %}
+            <p>{{ bill.name }}: ${{ bill.amount }}</p>
+            {% endfor %}
         </div>
     </div>
 </div>
