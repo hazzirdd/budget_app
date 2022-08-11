@@ -6,12 +6,47 @@
 </div>
 
 <div class="all-categories-container">
-    <div clas="mybudget-container">
+    <div clas="expenses-container-container">
 
-        <p>ID / NAME / LOCATION / AMOUNT / DATE / CATEGORY_ID / USER_ID </p>
-        {% for expense in expenses %}
-        <p>{{ expense.expense_id }} / {{ expense.name }} / {{ expense.location }} / ${{ expense.amount }} / {{ expense.date }} / {{ expense.category_id }} / {{ expense.user_id }} </p>
+        <div style="background-color:rgb(124, 124, 124);" class="expenses-container">
+            <p  style="font-weight:bold" class="expense">CATEGORY</p>
+            <p class="expense">NAME</p>
+            <p class="expense">LOCATION</p>
+            <p class="expense">AMOUNT</p>
+            <p class="expense">DATE</p>
+        </div>
+
+        {% for k, v in expense_dict.items() %}
+        <div class="expenses-container">
+            <p  style="background-color: {{ v['color'] }};" class="expense">{{ v["category"] }}</p>
+            <p class="expense">{{ v["name"] }}</p>
+            <p class="expense">{{ v["location"] }}</p>
+            <p class="expense">${{ v["amount"] }}</p>
+            <p class="expense">{{ v["date"] }}</p>
+            <a class="expense-delete" href="/delete_expense/{{ k }}">X</a>
+        </div>
         {% endfor %}
+
     </div>
-</div>
+</div><br>
+
+<div class="all-categories-container">
+    <div class="mybudget-bills-container" style="background-color:{{ bill_color }}">
+        <h1 class="category-title">MONTHLY BILLS</h1>
+        {% for bill in bills %}
+        <form class="expenses-container" style="background-color: rgb(192, 127, 29);">
+            <p class="bill">{{ bill.name }}</p>
+            <p class="bill">{{ bill.amount }}</p>
+            {% if bill.payed == True %}
+            <p class="bill">Payed</p>
+            {% else %}
+            <p class="bill">Unpayed</p>
+            {% endif %}
+            <label></label>
+            <input class="bill-checkbox" type="checkbox">
+        </form>
+        {% endfor %}
+
+    </div>
+   </div>
 {% endblock %}

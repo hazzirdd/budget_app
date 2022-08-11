@@ -74,13 +74,15 @@ def add_expense():
         if request.method == 'GET':
             return render_template('add_expense.html', categories=categories)
         else:
-
+            name = request.form["name"]
             location = request.form['location']
             amount = request.form['amount']
-            category = request.form['category']
             date = request.form['date']
+            category = request.form['category']
 
-            print(f'{location} / {amount} / {category} / {date}')
+            expense = Expense(name=name, location=location, amount=amount, date=date, category_id=category, user_id=session['user'])
+            db.session.add(expense)
+            db.session.commit()
 
             return render_template('add_expense.html', categories=categories)
     else:
@@ -90,27 +92,67 @@ def add_expense():
 def spending():
     if "user" in session:
         if request.method == 'GET':
+            user = User.query.get(session["user"])
+            expense_dict = {}
+            all_expenses = Expense.query.order_by(Expense.date.desc()).all()
+            all_bills = Bill.query.order_by(Bill.amount.desc()).all()
+            bill_color = user.bill_color
+            expenses = []
+            bills = []
+            for expense in all_expenses:
+                if expense.user_id == session['user']:
+                    expenses.append(expense)
+            for bill in all_bills:
+                if bill.user_id == session['user']:
+                    bills.append(bill)
 
-            expenses = Expense.query.filter(Expense.user_id == session["user"]).all()
+            for expense in expenses:
+                date = expense.date
+                date_strip = date.strftime('%m/%d/%Y')
+                category = Category.query.get(expense.category_id)
+                expense_dict[expense.expense_id] = {
+                    "color": category.color,
+                    "category": category.title,
+                    "name": expense.name,
+                    "location": expense.location,
+                    "amount": expense.amount,
+                    "date": date_strip
+                }
 
-            return render_template('spending.html', expenses=expenses)
+            return render_template('spending.html', expense_dict=expense_dict, bills=bills, bill_color=bill_color)
     else:
         return redirect(url_for("logout"))
 
+
+@app.route('/delete_expense/<id>', methods=['POST', 'GET'])
+def delete_expense(id):
+    if "user" in session:
+        expense = Expense.query.get(id)
+        db.session.delete(expense)
+        db.session.commit()
+        return redirect(url_for("spending"))
 
 @app.route('/my_budget', methods=['POST', 'GET'])
 def my_budget():
     if "user" in session:
         user = User.query.get(session["user"])
+        all_bills = Bill.query.order_by(Bill.amount.desc()).all()
         all_categories = Category.query.order_by(Category.limit.desc()).all()
         categories = []
         for category in all_categories:
             if category not in categories and category.user_id == session["user"]:
                 categories.append(category)
+        bills = []
+        for bill in all_bills:
+            if bill not in bills and bill.user_id == session["user"]:
+                bills.append(bill)
 
         remainder = user.budget
         for category in categories:
             remainder -= category.limit
+
+        for bill in bills:
+            remainder -= bill.amount
 
         if remainder >= 1:
             budget_color = 'green'
@@ -118,15 +160,13 @@ def my_budget():
             budget_color = 'red'
 
         if request.method == 'GET':
-            return render_template('my_budget.html', categories=categories, user=user, remainder=remainder, budget_color=budget_color)
+            return render_template('my_budget.html', categories=categories, user=user, remainder=remainder, budget_color=budget_color, bills=bills, bill_color=user.bill_color)
         else:
 
             title = request.form['title']
             limit = request.form['limit']
             color = request.form['color']
             id = request.form['id']
-
-            print(f"category: {title} limit: {limit} color: {color} id: {id}")
 
             selected_category = Category.query.get(id)
             selected_category.title = title
@@ -185,6 +225,50 @@ def delete_category(id):
     else:
         return redirect(url_for("logout"))
 
+
+@app.route('/update_bill', methods=['POST', 'GET'])
+def update_bill():
+    if "user" in session:
+        if request.method == 'POST':
+            bill_name = request.form['bill_name']
+            bill_amount = request.form['bill_amount']
+            bill_id = request.form['bill_id']
+            bill = Bill.query.get(bill_id)
+            bill.name = bill_name
+            bill.amount = bill_amount
+
+            db.session.commit()
+
+            return redirect(url_for('my_budget'))
+
+@app.route('/new_bill', methods=['POST', 'GET'])
+def new_bill():
+    if "user" in session:
+        if request.method == 'POST':
+            new_bill_name = request.form['new_bill_name']
+            new_bill_amount = request.form['new_bill_amount']
+
+            new_bill = Bill(name=new_bill_name, amount=new_bill_amount, payed=False, user_id=session["user"])
+
+            db.session.add(new_bill)
+            db.session.commit()
+
+            return redirect(url_for('my_budget'))
+        else:
+            return redirect(url_for('my_budget'))
+    else:
+        return redirect(url_for("logout"))
+
+
+@app.route('/delete_bill/<id>')
+def delete_bill(id):
+    if "user" in session:
+        bill = Bill.query.get(id)
+        db.session.delete(bill)
+        db.session.commit()
+        return redirect(url_for('my_budget'))
+    else:
+        return redirect(url_for("logout"))
 
 if __name__ == '__main__':
     app.run(debug=True)

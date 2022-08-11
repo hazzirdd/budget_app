@@ -30,9 +30,33 @@
             $<input class="mybudget-amount-new" type="number" placeholder="Limit" name="new_limit">
             <input class="category-color" type="color" value="" name="new_color" name="new_color">
             <input class="mybudget-submit-new" type="submit" id="mybudget-submit" value="+">
+        </form>
 
-        </form><br>
+    </div>
+</div><br>
 
+<div class="all-categories-container">
+    <div class="mybudget-bills-container" style="background-color: {{ bill_color }};">
+        <div class="mybudget-bills">
+            <h1 class="category-title">MONTHLY BILLS</h1>
+
+            {% for bill in bills %}
+            <form action="/update_bill" method="POST" class="mybudget-category" style="background-color: rgb(192, 127, 29);">
+                <input type="text" class="category-input-box" value="{{ bill.name }}" name="bill_name">
+                $<input class="mybudget-amount" type="number" value="{{ bill.amount }}" name="bill_amount">
+                <input class="mybudget-submit-button" type="submit" id="mybudget-submit" value="Update">
+                <input style="display:none;" value="{{ bill.bill_id }}" name="bill_id">
+                <a class="category-delete" href="/delete_bill/{{ bill.bill_id }}">Delete</a>
+            </form><br>
+            {% endfor %}
+
+            
+        <form action="/new_bill" class="mybudget-category-new" style="background-color: rgb(223, 172, 114);", method="POST">
+            <input type="text" class="category-input-box-new" placeholder="New Category" name="new_bill_name" style="border:0px solid transparent">
+            $<input class="mybudget-amount-new" type="number" placeholder="Limit" name="new_bill_amount" style="border:0px solid transparent">
+            <input class="mybudget-submit-new" type="submit" id="mybudget-submit" value="+">
+        </form>
+        </div>
     </div>
 </div>
 

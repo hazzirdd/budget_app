@@ -10,19 +10,21 @@
     <div class="add-expense-container">
       <h1>New Expenditure</h1>
       <form class="expense-form" method="post">
-          <input class="field-input" type="text" name="location" placeholder="Location"><br>
-          <input class="field-input" type="number" name="amount" placeholder="Amount"><br>
+          <input class="field-input" type="text" placeholder="Name" name="name"><br><br>
+          <input class="field-input" type="text" name="location" placeholder="Location"><br><br>
+          <input class="field-input" type="text" name="amount" placeholder="Amount"><br><br>
 
           <select class="field-input" name="category">
             {% for category in categories %}
             <option value="{{ category.category_id }}">{{ category.title }}</option>
             {% endfor %}
           </select>
-            <br>
+            <br><br>
 
           <input class="field-input" type="datetime-local" name="date" placeholder="Date"><br><br>
           <input class="expense-button" type="submit" value="Add Expense">
       </form>
     </div>
    </div>
+
 {% endblock %}
