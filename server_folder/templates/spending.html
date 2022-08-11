@@ -3,6 +3,7 @@
 {% block content %}
 <div class="page-title-container">
     <h1 class="page-title">SPENDING</h1>
+    <h2>Remainder: <span style="color:{{ budget_color }};">${{ remainder }}</span></h2>
 </div>
 
 <div class="all-categories-container">
@@ -34,16 +35,19 @@
     <div class="mybudget-bills-container" style="background-color:{{ bill_color }}">
         <h1 class="category-title">MONTHLY BILLS</h1>
         {% for bill in bills %}
-        <form class="expenses-container" style="background-color: rgb(192, 127, 29);">
+        <form class="expenses-container" style="background-color: rgb(192, 127, 29);", method="POST">
             <p class="bill">{{ bill.name }}</p>
-            <p class="bill">{{ bill.amount }}</p>
+            <p class="bill">${{ bill.amount }}</p>
             {% if bill.payed == True %}
-            <p class="bill">Payed</p>
+            <p class="bill" style="text-align: left">Payed</p>
+            <input class="bill-checkbox" type="checkbox" id="bill-checkbox" name="payed" checked="checked">
             {% else %}
-            <p class="bill">Unpayed</p>
+            <p class="bill" style="text-align: left">Unpayed</p>
+            <input class="bill-checkbox" type="checkbox" id="bill-checkbox" name="payed">
             {% endif %}
-            <label></label>
-            <input class="bill-checkbox" type="checkbox">
+            <input class="mybudget-submit-button" type="submit" id="mybudget-submit" value="Update">
+            <input style="display:none;" value="{{ bill.bill_id }}" name="bill_id">
+            <a class="category-delete" href="/delete_bill/{{ bill.bill_id }}">Delete</a>
         </form>
         {% endfor %}
 

@@ -1,5 +1,6 @@
 from server_folder import app, db
 from server_folder.model import Expense, User, Category, ExpenseCategory, Bill
+from functions import find_remainder
 
 import requests
 import datetime
@@ -25,16 +26,15 @@ def homepage():
                 categories_dict[category.category_id] = category.limit
 
         expenses = Expense.query.filter(Expense.user_id == session["user"]).all()
-        print(categories_dict)
 
         for key, value in categories_dict.items():
             for expense in expenses:
                 if expense.category_id == key:
                     categories_dict[key] -= expense.amount
 
-        print(categories_dict)
+        remainder, budget_color = find_remainder(user.user_id)
 
-        return render_template('homepage.html', user=user, categories=categories, categories_dict=categories_dict, bills=bills, bill_color=user.bill_color)
+        return render_template('homepage.html', user=user, categories=categories, categories_dict=categories_dict, bills=bills, bill_color=user.bill_color, budget_color=budget_color, remainder=remainder)
     else:
         return redirect(url_for("logout"))
 
@@ -51,7 +51,7 @@ def login():
         for user in users:
             if user.email == email and user.password == password:
                 session["user"] = user.user_id
-                return render_template('homepage.html', user=user)
+                return redirect(url_for("homepage"))
 
     flash("Incorrect login", "danger")
     return render_template('login.html')
@@ -67,12 +67,30 @@ def logout():
     return redirect(url_for('login'))
 
 
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'GET':
+        return render_template('signup.html')
+    else:
+        email = request.form['email']
+        password = request.form['password']
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+
+        user = User(email=email, password=password, first_name=first_name, last_name=last_name)
+        db.session.add(user)
+        db.session.commit()
+
+        return render_template('signup.html')
+
+
 @app.route('/add_expense', methods=['POST', 'GET'])
 def add_expense():
     if "user" in session:
+        remainder, budget_color = find_remainder(session["user"])
         categories = Category.query.filter(Category.user_id == session["user"]).all()
         if request.method == 'GET':
-            return render_template('add_expense.html', categories=categories)
+            return render_template('add_expense.html', categories=categories, budget_color=budget_color, remainder=remainder)
         else:
             name = request.form["name"]
             location = request.form['location']
@@ -84,7 +102,7 @@ def add_expense():
             db.session.add(expense)
             db.session.commit()
 
-            return render_template('add_expense.html', categories=categories)
+            return render_template('add_expense.html', categories=categories, budget_color=budget_color, remainder=remainder)
     else:
         return redirect(url_for("logout"))
 
@@ -119,7 +137,23 @@ def spending():
                     "date": date_strip
                 }
 
-            return render_template('spending.html', expense_dict=expense_dict, bills=bills, bill_color=bill_color)
+            remainder, budget_color = find_remainder(user.user_id)
+
+            return render_template('spending.html', expense_dict=expense_dict, bills=bills, bill_color=bill_color, remainder=remainder, budget_color=budget_color)
+        else:
+
+            # payed = request.form['payed']
+            bill_id = request.form['bill_id']
+            payed = request.form.getlist('payed')
+            if payed[0] == 'on':
+                payed = True
+            else:
+                payed = False
+            updated_bill = Bill.query.get(bill_id)
+            updated_bill.payed = payed
+            db.session.commit()
+
+            return redirect(url_for('spending'))
     else:
         return redirect(url_for("logout"))
 
@@ -147,17 +181,7 @@ def my_budget():
             if bill not in bills and bill.user_id == session["user"]:
                 bills.append(bill)
 
-        remainder = user.budget
-        for category in categories:
-            remainder -= category.limit
-
-        for bill in bills:
-            remainder -= bill.amount
-
-        if remainder >= 1:
-            budget_color = 'green'
-        else:
-            budget_color = 'red'
+        remainder, budget_color = find_remainder(user.user_id)
 
         if request.method == 'GET':
             return render_template('my_budget.html', categories=categories, user=user, remainder=remainder, budget_color=budget_color, bills=bills, bill_color=user.bill_color)

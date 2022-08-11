@@ -293,15 +293,17 @@ body {
 .category-delete {
   background-color: rgb(97, 94, 94);
   border: 3px solid rgb(0, 0, 0);
-  height: 70px;
+  height: 65px;
   width: 65px;
   text-decoration: none;
-  line-height: 70px;
+  line-height: 65px;
   text-align: center;
   color: black;
   font-size: 18px;
-  font-family:'Times New Roman', Times, serif
+  font-family: 'Times New Roman', Times, serif;
+  margin-left: 10px;
 }
+
 
 .category-delete:hover {
   background-color: rgb(139, 136, 136);
@@ -404,12 +406,14 @@ body {
 .expenses-container {
   display: flex;
   flex-direction: row;
+  align-items: center;
   text-align: center;
   background-color: rgb(155, 155, 155);
   border: 2px solid black;
   justify-content: center;
   padding-left: 10px;
   padding-right: 10px;
+
 }
 
 .expense {
@@ -433,8 +437,6 @@ body {
   color: black;
   font-size: 18px;
   font-family: 'Times New Roman', Times, serif;
-  position: relative;
-  top: 22px;
 }
 
 .expense-delete:hover {
@@ -459,8 +461,10 @@ body {
   border: 1px solid black;
   background-color: rgb(223, 172, 97);
   font-size: 21px;
-  height:40px;
+  height: 40px;
   padding: 10px;
-  width: 150px;
+  width: 44px;
   line-height: 40px;
+  position: relative;
+  left: -63px;
 }

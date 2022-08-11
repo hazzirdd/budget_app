@@ -3,6 +3,7 @@
 
 <div class="page-title-container">
     <h1 class="page-title">HOMEPAGE</h1>
+    <h2>Remainder: <span style="color:{{ budget_color }};">${{ remainder }}</span></h2>
     <p>Welcome, {{  user.first_name }}</p>
 </div>
 
@@ -28,7 +29,11 @@
         <h1 class="category-title">Bills</h1>
         <div class="bills-list">
             {% for bill in bills %}
+            {% if bill.payed == False %}
             <p>{{ bill.name }}: ${{ bill.amount }}</p>
+            {% else %}
+            <p style="text-decoration: line-through;">{{ bill.name }}: ${{ bill.amount }}</p>
+            {% endif %}
             {% endfor %}
         </div>
     </div>
