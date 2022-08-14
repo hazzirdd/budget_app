@@ -1,6 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+   {% if messages %}
+   {% for category, message in messages %}
+   <div class="alert alert-{{ category }}">
+    {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+    {% endfor %}
+  {% endif %}
+ {% endwith %}
+
 <div class="page-title-container">
     <h1 class="page-title">ADD EXPENSE</h1>
     <h2>Remainder: <span style="color:{{ budget_color }};">${{ remainder }}</span></h2>
@@ -11,9 +25,24 @@
     <div class="add-expense-container">
       <h1>New Expenditure</h1>
       <form class="expense-form" method="post">
-          <input class="field-input" type="text" placeholder="Name" name="name"><br><br>
+
+        {% if name_error == True %}
+          <input class="field-input" type="text" placeholder="Name" name="name" style="border: 3px solid red"><br><br>
+        {% else %}
+        <input class="field-input" type="text" placeholder="Name" name="name"><br><br>
+        {% endif %}
+
+        {% if location_error == True %}
+          <input class="field-input" type="text" name="location" placeholder="Location" style="border: 3px solid red"><br><br>
+        {% else %}
           <input class="field-input" type="text" name="location" placeholder="Location"><br><br>
+        {% endif %}
+
+        {% if amount_error == True %}
+          <input class="field-input" type="text" name="amount" placeholder="Amount" style="border: 3px solid red"><br><br>
+          {% else %}
           <input class="field-input" type="text" name="amount" placeholder="Amount"><br><br>
+          {% endif %}
 
           <select class="field-input" name="category">
             {% for category in categories %}
@@ -22,7 +51,12 @@
           </select>
             <br><br>
 
+          {% if date_error == True %}
+          <input class="field-input" type="datetime-local" name="date" placeholder="Date" style="border: 3px solid red"><br><br>
+          {% else %}
           <input class="field-input" type="datetime-local" name="date" placeholder="Date"><br><br>
+          {% endif %}
+
           <input class="expense-button" type="submit" value="Add Expense">
       </form>
     </div>

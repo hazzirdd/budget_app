@@ -1,6 +1,6 @@
 from server_folder import app, db
 from server_folder.model import Expense, User, Category, ExpenseCategory, Bill
-from functions import find_remainder
+from functions import find_remainder, find_month_remainder, current_month
 
 import requests
 import datetime
@@ -25,14 +25,15 @@ def homepage():
 
                 categories_dict[category.category_id] = category.limit
 
-        expenses = Expense.query.filter(Expense.user_id == session["user"]).all()
+        all_expenses = Expense.query.order_by(Expense.date.desc()).all()
+        expenses = current_month(all_expenses, user)
 
         for key, value in categories_dict.items():
             for expense in expenses:
                 if expense.category_id == key:
                     categories_dict[key] -= expense.amount
 
-        remainder, budget_color = find_remainder(user.user_id)
+        remainder, budget_color = find_month_remainder(user.user_id)
 
         return render_template('homepage.html', user=user, categories=categories, categories_dict=categories_dict, bills=bills, bill_color=user.bill_color, budget_color=budget_color, remainder=remainder)
     else:
@@ -87,22 +88,39 @@ def signup():
 @app.route('/add_expense', methods=['POST', 'GET'])
 def add_expense():
     if "user" in session:
-        remainder, budget_color = find_remainder(session["user"])
+        remainder, budget_color = find_month_remainder(session["user"])
         categories = Category.query.filter(Category.user_id == session["user"]).all()
         if request.method == 'GET':
             return render_template('add_expense.html', categories=categories, budget_color=budget_color, remainder=remainder)
         else:
-            name = request.form["name"]
-            location = request.form['location']
+            name = request.form["name"].strip()
+            location = request.form["location"].strip()
             amount = request.form['amount']
             date = request.form['date']
             category = request.form['category']
+
+            # HANDLING ERRORS
+            name_error = False
+            location_error = False
+            amount_error = False
+            date_error = False
+            if name == '':
+                name_error = True
+            if not location:
+                location_error = True
+            if not amount:
+                amount_error = True
+            if not date:
+                date_error = True
+            if name_error == True or location_error == True or amount_error == True or date_error == True:
+                flash("Please enter all fields", "danger")
+                return render_template('add_expense.html', categories=categories, budget_color=budget_color, remainder=remainder, name_error=name_error, location_error=location_error, amount_error=amount_error, date_error=date_error)
 
             expense = Expense(name=name, location=location, amount=amount, date=date, category_id=category, user_id=session['user'])
             db.session.add(expense)
             db.session.commit()
 
-            return render_template('add_expense.html', categories=categories, budget_color=budget_color, remainder=remainder)
+            return redirect(url_for('add_expense'))
     else:
         return redirect(url_for("logout"))
 
@@ -115,11 +133,9 @@ def spending():
             all_expenses = Expense.query.order_by(Expense.date.desc()).all()
             all_bills = Bill.query.order_by(Bill.amount.desc()).all()
             bill_color = user.bill_color
-            expenses = []
             bills = []
-            for expense in all_expenses:
-                if expense.user_id == session['user']:
-                    expenses.append(expense)
+            expenses = current_month(all_expenses, user)
+
             for bill in all_bills:
                 if bill.user_id == session['user']:
                     bills.append(bill)
@@ -137,7 +153,7 @@ def spending():
                     "date": date_strip
                 }
 
-            remainder, budget_color = find_remainder(user.user_id)
+            remainder, budget_color = find_month_remainder(user.user_id)
 
             return render_template('spending.html', expense_dict=expense_dict, bills=bills, bill_color=bill_color, remainder=remainder, budget_color=budget_color)
         else:
@@ -145,7 +161,7 @@ def spending():
             # payed = request.form['payed']
             bill_id = request.form['bill_id']
             payed = request.form.getlist('payed')
-            if payed[0] == 'on':
+            if payed:
                 payed = True
             else:
                 payed = False
@@ -224,10 +240,20 @@ def update_budget():
 def new_category():
     if "user" in session:
         if request.method == 'POST':
-            new_title = request.form['new_title']
+            new_title = request.form['new_title'].strip()
             new_limit = request.form['new_limit']
             new_color = request.form['new_color']
 
+            categories = Category.query.filter(Category.user_id == session["user"]).all()
+            if new_title == '':
+                flash("Please enter a category title", "danger")
+                return redirect(url_for('my_budget'))
+            for category in categories:
+                if category.title == new_title:
+                    flash("Category title already exists", "danger")
+                    return redirect(url_for('my_budget'))
+
+            print(category.title)
             new_category = Category(color=new_color, title=new_title, limit=new_limit, user_id=session["user"])
             db.session.add(new_category)
             db.session.commit()
@@ -243,8 +269,12 @@ def new_category():
 def delete_category(id):
     if "user" in session:
         category = Category.query.get(id)
-        db.session.delete(category)
-        db.session.commit()
+        try:
+            db.session.delete(category)
+            db.session.commit()
+        except:
+            flash("Cannot delete category with dependant expenses", "danger")
+            return redirect(url_for('my_budget'))
         return redirect(url_for('my_budget'))
     else:
         return redirect(url_for("logout"))

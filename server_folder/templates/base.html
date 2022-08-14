@@ -24,7 +24,19 @@
         <button class="openbtn" onclick="openNav()">&#9776;</button>
     </div>
 
-
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert-{{ category }}">
+     {{ message }}
+     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+       <span aria-hidden="true">&times;</span>
+     </button>
+   </div>
+     {% endfor %}
+   {% endif %}
+  {% endwith %}
+  
     <script>
         function openNav() {
           document.getElementById("mySidebar").style.width = "250px";

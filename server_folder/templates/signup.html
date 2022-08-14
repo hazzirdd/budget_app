@@ -1,19 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-   {% if messages %}
-   {% for category, message in messages %}
-   <div class="alert alert-{{ category }}">
-    {{ message }}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-    {% endfor %}
-  {% endif %}
- {% endwith %}
-
 <div class="page-title-container">
     <h1 class="page-title">WELCOME TO INBUDGET</h1>
 </div>

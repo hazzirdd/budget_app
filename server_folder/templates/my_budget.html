@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <form method="post" action="/update_budget" class="page-title-container">
     <h1 class="page-title">MY BUDGET</h1>
     <h1>Budget:</h1>
@@ -8,7 +9,7 @@
         $<input type="number" name="new_budget" value="{{ user.budget }}"  class="budget-input-box" />
         <input class="budget-update-button" type="submit" value="Update">
     </div>
-    <h2>Remainder: <span style="color:{{ budget_color }};">${{ remainder }}</span></h2>
+    <h2>Left To Distribute: <span style="color:{{ budget_color }};">${{ remainder }}</span></h2>
 </form>
 
 <div class="all-categories-container">

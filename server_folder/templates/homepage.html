@@ -14,8 +14,10 @@
         <div class="category-container" style="background-color:{{ category.color }};">
             <h1 class="category-title">{{ category.title }}</h1>
             {% for k, v in categories_dict.items() %}
-            {% if category.category_id == k %}
-            <p class="category-amount">${{ v }} left</p>
+            {% if category.category_id == k  and v >= 1 %}
+            <p class="category-amount" style="color:green">${{ v }} left</p>
+            {% elif category.category_id == k and v < 1 %}
+            <p class="category-amount" style="color:red">${{ v }} left</p>
             {% endif %}
             {% endfor %}
         </div>

@@ -64,6 +64,16 @@
   }
 /* END OF SIDEBAR */
 
+/* FLASH */
+.alert-danger {
+  background-color: red;
+  color: white;
+}
+
+.alert-info {
+  background-color: yellow;
+  color: black;
+}
 
 
 /* APP */
@@ -112,7 +122,6 @@ body {
 
 .category-amount {
   text-align: center;
-  color: green;
   font-weight: 600;
   font-size: 40px;
   font-family: fantasy;
