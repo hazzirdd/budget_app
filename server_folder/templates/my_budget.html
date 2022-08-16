@@ -18,7 +18,7 @@
         {% for category in categories %}
         <form class="mybudget-category" style="background-color: {{ category.color }};" method="post">
             <input type="text" class="category-input-box" value="{{ category.title }}" placeholder="{{ category.title }}" name="title">
-            $<input class="mybudget-amount" type="number" value="{{ category.limit }}" name="limit">
+            $<input class="mybudget-amount" type="text" value="{{ category.limit }}" name="limit">
             <input class="category-color" type="color" value="{{ category.color }}" name="color">
             <input class="mybudget-submit-button" type="submit" id="mybudget-submit" value="Update">
             <input style="display:none;" value="{{ category.category_id }}" name="id">
@@ -28,7 +28,7 @@
 
         <form action="/new_category" class="mybudget-category-new" style="background-color: rgb(196, 190, 190);", method="POST">
             <input type="text" class="category-input-box-new" placeholder="New Category" name="new_title">
-            $<input class="mybudget-amount-new" type="number" placeholder="Limit" name="new_limit">
+            $<input class="mybudget-amount-new" type="text" placeholder="Limit" name="new_limit">
             <input class="category-color" type="color" value="" name="new_color" name="new_color">
             <input class="mybudget-submit-new" type="submit" id="mybudget-submit" value="+">
         </form>

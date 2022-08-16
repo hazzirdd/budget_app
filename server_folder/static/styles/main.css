@@ -64,17 +64,6 @@
   }
 /* END OF SIDEBAR */
 
-/* FLASH */
-.alert-danger {
-  background-color: red;
-  color: white;
-}
-
-.alert-info {
-  background-color: yellow;
-  color: black;
-}
-
 
 /* APP */
 body {
@@ -108,6 +97,7 @@ body {
 
 .category-container {
   width: 250px;
+  height: 200px;
   border: 2px solid black;
   border-radius: 10%;
 }
@@ -235,7 +225,7 @@ body {
 }
 
 .mybudget-container {
-  width: 840px;
+  width: 887px;
   height: auto;
   background-color: #818181;
   padding: 30px;
@@ -302,8 +292,8 @@ body {
 .category-delete {
   background-color: rgb(97, 94, 94);
   border: 3px solid rgb(0, 0, 0);
-  height: 65px;
-  width: 65px;
+  height: 70px;
+  width: 70px;
   text-decoration: none;
   line-height: 65px;
   text-align: center;
@@ -320,7 +310,7 @@ body {
   height: 70px;
   color: red;
   cursor: pointer;
-  font-style: italic;
+  text-decoration: none;
 }
 
 .mybudget-category-new {
@@ -396,7 +386,7 @@ body {
 }
 
 .mybudget-bills-container {
-  width: 840px;
+  width: 945px;
   height: auto;
   padding: 30px;
   border: 5px solid black;
@@ -422,47 +412,50 @@ body {
   justify-content: center;
   padding-left: 10px;
   padding-right: 10px;
-
+  height: 100px;
+  width: 887px;
 }
 
 .expense {
   border: 1px solid black;
   background-color: rgb(184, 184, 184);
   font-size: 21px;
-  height:40px;
+  height: 64px;
   padding: 10px;
-  width: 150px;
+  width: 170px;
   line-height: 40px;
 }
 
 .expense-delete {
   background-color: rgb(97, 94, 94);
   border: 3px solid rgb(0, 0, 0);
-  height: 50px;
-  width: 30px;
+  height: 58px;
+  width: 24px;
   text-decoration: none;
   line-height: 50px;
   text-align: center;
   color: black;
   font-size: 18px;
   font-family: 'Times New Roman', Times, serif;
+  position: relative;
+  top: -6px;
 }
 
 .expense-delete:hover {
   background-color: rgb(139, 136, 136);
   border: 3px solid rgb(255, 0, 0);
-  height: 50px;
   color: red;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .bill {
   border: 1px solid black;
   background-color: rgb(223, 172, 97);
   font-size: 21px;
-  height:40px;
+  height:64px;
   padding: 10px;
-  width: 150px;
+  width: 225px;
   line-height: 40px;
 }
 
@@ -476,4 +469,5 @@ body {
   line-height: 40px;
   position: relative;
   left: -63px;
+  top: -6px;
 }

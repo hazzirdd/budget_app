@@ -19,6 +19,7 @@ class User(db.Model):
     last_name = db.Column(db.String(64), nullable=False)
     budget = db.Column(db.Float, nullable=False, default=0.00)
     bill_color = db.Column(db.String(64), nullable=False, default='#955525')
+    new_month_switch = db.Column(db.Boolean, nullable=False, default=False)
 
 class Category(db.Model):
 

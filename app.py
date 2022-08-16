@@ -1,11 +1,13 @@
 from server_folder import app, db
 from server_folder.model import Expense, User, Category, ExpenseCategory, Bill
-from functions import find_remainder, find_month_remainder, current_month
+from functions import certain_month_expenses, find_remainder, find_month_remainder, current_month_expenses, new_month_check
 
 import requests
 import datetime
 from flask import Flask, redirect, render_template, request, url_for, session, flash
 from werkzeug.utils import secure_filename
+
+month_count = 0
 
 @app.route('/')
 def homepage():
@@ -26,7 +28,7 @@ def homepage():
                 categories_dict[category.category_id] = category.limit
 
         all_expenses = Expense.query.order_by(Expense.date.desc()).all()
-        expenses = current_month(all_expenses, user)
+        expenses = current_month_expenses(all_expenses, user)
 
         for key, value in categories_dict.items():
             for expense in expenses:
@@ -34,6 +36,7 @@ def homepage():
                     categories_dict[key] -= expense.amount
 
         remainder, budget_color = find_month_remainder(user.user_id)
+        new_month_check(user)
 
         return render_template('homepage.html', user=user, categories=categories, categories_dict=categories_dict, bills=bills, bill_color=user.bill_color, budget_color=budget_color, remainder=remainder)
     else:
@@ -134,7 +137,12 @@ def spending():
             all_bills = Bill.query.order_by(Bill.amount.desc()).all()
             bill_color = user.bill_color
             bills = []
-            expenses = current_month(all_expenses, user)
+            expenses = current_month_expenses(all_expenses, user)
+
+            # SELECT MONTH EXPENSE VIEW
+            # today = date.today().strftime('%m/%d/%Y')
+            # month, day, year = today.split('/')
+            # expenses_test = certain_month_expenses(all_expenses, user, month, year)
 
             for bill in all_bills:
                 if bill.user_id == session['user']:
@@ -157,8 +165,6 @@ def spending():
 
             return render_template('spending.html', expense_dict=expense_dict, bills=bills, bill_color=bill_color, remainder=remainder, budget_color=budget_color)
         else:
-
-            # payed = request.form['payed']
             bill_id = request.form['bill_id']
             payed = request.form.getlist('payed')
             if payed:
@@ -172,6 +178,17 @@ def spending():
             return redirect(url_for('spending'))
     else:
         return redirect(url_for("logout"))
+
+
+@app.route('/select_month', methods=['GET', 'POST'])
+def select_month():
+    if "user" in session:
+
+        date = request.form["date"]
+        year, month, day = date.split('-')
+        print(year, month)
+
+        return redirect(url_for("spending"))
 
 
 @app.route('/delete_expense/<id>', methods=['POST', 'GET'])
@@ -241,8 +258,24 @@ def new_category():
     if "user" in session:
         if request.method == 'POST':
             new_title = request.form['new_title'].strip()
-            new_limit = request.form['new_limit']
             new_color = request.form['new_color']
+            raw_limit = request.form['new_limit']
+
+            print(raw_limit)
+            try:
+                new_limit = float(raw_limit)
+                print(new_limit)
+            except:
+                flash("Category limit must be a number (1)", "danger")
+                return redirect(url_for('my_budget'))
+            
+            print(type(new_limit))
+            if not isinstance(new_limit, float):
+                flash("Category limit must be a number (2)", "danger")
+                return redirect(url_for('my_budget'))
+
+            float_limit = "{:.2f}".format(new_limit)
+            print(float_limit)
 
             categories = Category.query.filter(Category.user_id == session["user"]).all()
             if new_title == '':
@@ -253,8 +286,7 @@ def new_category():
                     flash("Category title already exists", "danger")
                     return redirect(url_for('my_budget'))
 
-            print(category.title)
-            new_category = Category(color=new_color, title=new_title, limit=new_limit, user_id=session["user"])
+            new_category = Category(color=new_color, title=new_title, limit=float_limit, user_id=session["user"])
             db.session.add(new_category)
             db.session.commit()
 
