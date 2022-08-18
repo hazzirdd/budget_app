@@ -15,9 +15,11 @@
             <h1 class="category-title">{{ category.title }}</h1>
             {% for k, v in categories_dict.items() %}
             {% if category.category_id == k  and v >= 1 %}
-            <p class="category-amount" style="color:green">${{ v }} left</p>
+            <p class="category-amount" style="color:#62ee62">${{ v }}</p>
+            <p class="category-text" style="color:#278327;">remaining</p>
             {% elif category.category_id == k and v < 1 %}
-            <p class="category-amount" style="color:red">${{ v }} left</p>
+            <p class="category-amount" style="color:red">${{ v }}</p>
+            <p class="category-text" style="color:#852020;">over</p>
             {% endif %}
             {% endfor %}
         </div>

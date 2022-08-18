@@ -80,7 +80,8 @@ def current_month_expenses(all_expenses, user):
     return expenses
 
 
-def certain_month_expenses(all_expenses, user, month, year):
+def certain_month_expenses(user, month, year):
+    all_expenses = Expense.query.order_by(Expense.date.desc()).all()
     expenses = []
 
     for expense in all_expenses:

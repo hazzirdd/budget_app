@@ -68,6 +68,7 @@
 /* APP */
 body {
   background-color: rgb(125, 184, 184);
+  padding: 0;
 }
 
 .page-title-container {
@@ -80,6 +81,22 @@ body {
 .page-title {
   color: black;
   font-size: 40px;
+}
+
+.footer {
+  display: flex;
+  position: relative;
+  bottom: -165px;
+}
+
+.footer-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #111;
+  width: 100%;
+  height: .5in;
+  color: rgb(200, 202, 204);
 }
 
 /* HOMEPAGE */
@@ -115,7 +132,16 @@ body {
   font-weight: 600;
   font-size: 40px;
   font-family: fantasy;
-  -webkit-text-stroke: 0.1px white;
+  -webkit-text-stroke: 0.3px black;
+}
+
+.category-text {
+  text-align: center;
+  color: #278327;
+  font-weight: 600;
+  font-size: 37px;
+  font-family: fantasy;
+  -webkit-text-stroke: 0.3px black;
 }
 
 .bills-container {
@@ -149,7 +175,7 @@ body {
   top: 20px;
   padding: 20px;
   width: 650px;
-  height: 400px;
+  height: auto;
   border: 4px solid black;
   background-color: rgba(197, 193, 193, 0.52);
 }
@@ -158,6 +184,9 @@ body {
   position: relative;
   left: 5px;
   top: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .expense-button {
@@ -181,6 +210,24 @@ body {
   height: 26px;
 }
 
+/* LOGIN */
+.login-button {
+  background-color: rgb(196, 34, 34);
+  border: 2px solid rgb(61, 4, 4);
+  width: 110px;
+  height: 32px;
+  text-decoration: none;
+  color: black;
+  text-align: center;
+  line-height: 26px;
+  font-size: 16px;
+}
+
+.login-button:hover {
+  border: 2px solid red;
+  color: red;
+  cursor: pointer;
+}
 
 /* MY BUDGET */
 .budget-input-box-container {

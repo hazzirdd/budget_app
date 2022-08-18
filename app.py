@@ -65,14 +65,15 @@ def login():
 def logout():
     if "user" in session:
         user = session["user"]
-        flash(f"Successfully logged out", 'success')
         session.pop("user", None)
 
+    flash(f"Successfully logged out", 'success')
     return redirect(url_for('login'))
 
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    users = User.query.all()
     if request.method == 'GET':
         return render_template('signup.html')
     else:
@@ -81,11 +82,21 @@ def signup():
         first_name = request.form['first_name']
         last_name = request.form['last_name']
 
+        if not email or not first_name or not last_name or not password:
+            flash("Please enter all credentials", 'danger')
+            return redirect(url_for('signup'))
+
+        for user in users:
+            if email == user.email:
+                flash("Email not available", 'danger')
+                return redirect(url_for('signup'))
+
+
         user = User(email=email, password=password, first_name=first_name, last_name=last_name)
         db.session.add(user)
         db.session.commit()
 
-        return render_template('signup.html')
+        return redirect(url_for('login'))
 
 
 @app.route('/add_expense', methods=['POST', 'GET'])
@@ -132,34 +143,36 @@ def spending():
     if "user" in session:
         if request.method == 'GET':
             user = User.query.get(session["user"])
-            expense_dict = {}
             all_expenses = Expense.query.order_by(Expense.date.desc()).all()
             all_bills = Bill.query.order_by(Bill.amount.desc()).all()
             bill_color = user.bill_color
             bills = []
-            expenses = current_month_expenses(all_expenses, user)
-
-            # SELECT MONTH EXPENSE VIEW
-            # today = date.today().strftime('%m/%d/%Y')
-            # month, day, year = today.split('/')
-            # expenses_test = certain_month_expenses(all_expenses, user, month, year)
 
             for bill in all_bills:
                 if bill.user_id == session['user']:
                     bills.append(bill)
 
-            for expense in expenses:
-                date = expense.date
-                date_strip = date.strftime('%m/%d/%Y')
-                category = Category.query.get(expense.category_id)
-                expense_dict[expense.expense_id] = {
-                    "color": category.color,
-                    "category": category.title,
-                    "name": expense.name,
-                    "location": expense.location,
-                    "amount": expense.amount,
-                    "date": date_strip
-                }
+            if not 'expenses' in session:
+                expenses = current_month_expenses(all_expenses, user)
+                expense_dict = {}
+                
+                for expense in expenses:
+                    date = expense.date
+                    date_strip = date.strftime('%m/%d/%Y')
+                    category = Category.query.get(expense.category_id)
+                    float_amount = "{:.2f}".format(expense.amount)
+                    expense_dict[expense.expense_id] = {
+                        "color": category.color,
+                        "category": category.title,
+                        "name": expense.name,
+                        "location": expense.location,
+                        "amount": float_amount,
+                        "date": date_strip
+                    }
+                session['expenses'] = expense_dict
+
+            else:
+                expense_dict = session['expenses']
 
             remainder, budget_color = find_month_remainder(user.user_id)
 
@@ -183,12 +196,35 @@ def spending():
 @app.route('/select_month', methods=['GET', 'POST'])
 def select_month():
     if "user" in session:
-
+        user = User.query.get(session["user"])
         date = request.form["date"]
         year, month, day = date.split('-')
-        print(year, month)
+        expenses = certain_month_expenses(user, month, year)
+        expense_dict = {}
+        all_bills = Bill.query.order_by(Bill.amount.desc()).all()
+        bills = []
 
-        return redirect(url_for("spending"))
+        for bill in all_bills:
+            if bill.user_id == session['user']:
+                bills.append(bill)
+
+        for expense in expenses:
+            date = expense.date
+            date_strip = date.strftime('%m/%d/%Y')
+            category = Category.query.get(expense.category_id)
+            float_amount = "{:.2f}".format(expense.amount)
+            expense_dict[expense.expense_id] = {
+                "color": category.color,
+                "category": category.title,
+                "name": expense.name,
+                "location": expense.location,
+                "amount": float_amount,
+                "date": date_strip
+            }
+
+        session['expenses'] = expense_dict        
+
+        return redirect(url_for('spending', expense_dict=expense_dict))
 
 
 @app.route('/delete_expense/<id>', methods=['POST', 'GET'])
