@@ -66,6 +66,7 @@ def logout():
     if "user" in session:
         user = session["user"]
         session.pop("user", None)
+        session.pop("expenses", None)
 
     flash(f"Successfully logged out", 'success')
     return redirect(url_for('login'))
